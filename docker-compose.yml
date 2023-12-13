@@ -1,0 +1,82 @@
+version: '3'
+services:
+
+    php:
+        image: "my-php-fpm:82"
+        build:
+            context: "stack/php82"
+            dockerfile: "php.Dockerfile"
+        restart: unless-stopped
+        volumes:
+            - "./stack/php82/99-overrides.ini:/etc/php/8.2/cli/conf.d/99-overrides.ini"
+            - "./stack/php82/99-overrides.ini:/etc/php/8.2/fpm/conf.d/99-overrides.ini"
+            - "./src:/var/www/src"
+        dns:
+            - "1.1.1.1"
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+        networks:
+            container-network:
+                aliases:
+                    - "php.svc"
+        depends_on:
+            - "web"
+            - "redis"
+        profiles:
+            - "all"
+            - "no_db"
+    web:
+        image: "my-nginx:1.22"
+        build:
+            context: "stack/nginx122"
+            dockerfile: "nginx.Dockerfile"
+        restart: unless-stopped
+        volumes:
+            - "./src:/var/www/src"
+        environment:
+            - NGINX_HOST=${DK_WEB_HOST}
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+        ports:
+            - "${DK_WEB_PORT}:80"
+        networks:
+            container-network:
+                aliases:
+                    - "web.svc"
+        profiles:
+            - "all"
+            - "no_db"
+    db:
+        image: postgres:13
+        restart: unless-stopped
+        volumes:
+            - "postgres-data:/var/lib/postgresql/data"
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+        ports:
+            - "${DK_DB_PORT}:5432"
+        networks:
+            container-network:
+                aliases:
+                    - "db.svc"
+        environment:
+            - POSTGRES_DB=${DK_DB_NAME}
+            - POSTGRES_PASSWORD=${DK_DB_PASSWORD}
+        profiles:
+            - "all"
+    redis:
+        image: "redis:alpine"
+        restart: unless-stopped
+        networks:
+            container-network:
+                aliases:
+                    - "redis.svc"
+        profiles:
+            - "all"
+            - "no_db"
+
+networks:
+    container-network:
+        external: true
+volumes:
+    postgres-data:

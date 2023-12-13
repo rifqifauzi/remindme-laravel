@@ -34,3 +34,48 @@ We will evaluate your submission based on these criteria:
 > **Note:**
 >
 > If you have any questions regarding this challenge, please don't hesitate to open an issue in this repository.
+
+
+How to deploy
+---------------------------------
+COMMAND
+--------
+- Prepare: create docker network
+    $ docker network create --driver bridge container-network
+
+- Starting app
+    $ docker compose --profile all up -d
+
+- Stopping app
+    $ docker compose --profile all down
+
+- Laravel migration
+    $ docker compose exec php bash
+
+    then inside container service "php"
+    $ php artisan migrate:fresh --seed
+
+
+
+TREE
+-----
+stack/
+    * dockerfile of custom stacks
+docker-compose.yml
+    * recipe to start docker compose
+README.txt
+    * this file
+.env
+    * where environment varibles read
+.env.docker-example
+    * sample of .env
+
+
+
+STACKS
+-----
+    - php 8.1 fpm
+    - nginx (listen to 127.0.0.1:8000, see .env)
+    - redis
+    - postgres 13 (listen to 127.0.0.1:5432, see .env)
+
