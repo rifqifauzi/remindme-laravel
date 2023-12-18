@@ -74,7 +74,7 @@ README.txt
 
 STACKS
 -----
-    - php 8.1 fpm
+    - php 8.2 fpm
     - nginx (listen to 127.0.0.1:8000, see .env)
     - redis
     - postgres 13 (listen to 127.0.0.1:5432, see .env)

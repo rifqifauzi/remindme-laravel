@@ -1,6 +1,5 @@
 version: '3'
 services:
-
     php:
         image: "my-php-fpm:82"
         build:
