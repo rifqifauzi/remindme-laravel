@@ -33,7 +33,7 @@ class TokenController extends Controller
 
         // only 1 active api token per user
         $user->tokens()->delete();
-
+        //dd("test");
         return $user->createToken($request->device_name)->plainTextToken;
     }
 
