@@ -61,9 +61,13 @@ class User extends Authenticatable
         $uuidToken = UuidToken::create([
             'user_id' => $this->id,
             'token_id' => $token->id,
-            'uuid' => $uuid = Str::uuid()->toString(),
+            'access_token' => $accessToken = Str::uuid()->toString(),
+            'refresh_token' => $refreshToken = Str::uuid()->toString(),
         ]);
 
-        return $uuid;
+        return [
+            'access_token' => $accessToken,
+            'refresh_token' => $refreshToken
+        ];
     }
 }

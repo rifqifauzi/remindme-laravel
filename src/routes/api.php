@@ -39,7 +39,7 @@ Route::controller(AuthController::class)->group(function() {
 
 });*/
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('uuid-token-auth')->group(function () {
     Route::controller(TokenController::class)->group(function() {
         Route::get('user', function (Request $request) {
             return $request->user();

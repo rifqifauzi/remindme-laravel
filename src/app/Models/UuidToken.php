@@ -12,6 +12,7 @@ class UuidToken extends Model
     protected $fillable = [
         'user_id',
         'token_id',
-        'uuid',
+        'access_token',
+        'refresh_token',
     ];
 }

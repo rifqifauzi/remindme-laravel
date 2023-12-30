@@ -72,8 +72,8 @@ class AuthController extends Controller
             ResponseMessageEnum::TRUE,
             [
                 'user' => $user,
-                'access_token' => $token,
-                'refresh_token' => ''
+                'access_token' => $token['access_token'],
+                'refresh_token' => $token['refresh_token']
                 ]
         );
     }
