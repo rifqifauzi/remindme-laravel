@@ -13,4 +13,6 @@ enum ResponseMessageEnum: string
     case STATUS_MISMATCH = 'Pengguna status not valid';
     case TYPE_ERROR = 'TypeError was raised';
     case UNPROCESSABLE_ENTITY = 'unprocessable entity';
+    case TRUE = 'true';
+    case FALSE = 'false';
 }

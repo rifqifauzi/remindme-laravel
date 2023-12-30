@@ -53,27 +53,35 @@ class AuthController extends Controller
 
         if (!Auth::attempt($validated)) {
             return new BaseResponse(
-                ResponseMessageEnum::UNAUTHENTICATED,
-                (object)[],
+                ResponseMessageEnum::FALSE,
+                ['err' => 'ERR_INVALID_CREDS',
+                 'msg' => 'incorect username or password'],
                 Response::HTTP_UNAUTHORIZED
             );
         }
 
-        $pengguna = User::where('email', $request->safe()->only(['email']))->firstOrFail();
-        $token = $pengguna->createToken('auth_token')->plainTextToken;
+        $user = User::where('email', $request->safe()->only(['email']))
+                    ->select('id', 'email', 'name')
+                    ->firstOrFail();
+        //$token = $user->createToken('auth_token')->plainTextToken;
+
+        $token = $user->createTokenWithUuid('auth_token');
+
 
         return new BaseResponse(
-            ResponseMessageEnum::SUCCESS,
-            ['bearer_token' => $token]
+            ResponseMessageEnum::TRUE,
+            [
+                'user' => $user,
+                'access_token' => $token,
+                'refresh_token' => ''
+                ]
         );
     }
 
     public function profile(): BaseResponse
     {
-        $pengguna = auth()->user()->load(['region']);
-        $pengguna['region_nama'] = $pengguna['region']->nama;
-        unset($pengguna['region']);
-
+        $pengguna = auth()->user();
+        
         return new BaseResponse(
             ResponseMessageEnum::SUCCESS,
             $pengguna

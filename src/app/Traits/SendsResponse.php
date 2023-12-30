@@ -14,9 +14,14 @@ trait SendsResponse
 
     public function toResponse($request): JsonResponse
     {
-        $data = [
+        /*$data = [
             "message" => $this->message,
             "content" => $this->content,
+        ];*/
+
+        $data = [
+            "ok" => $this->message,
+            "data"=> $this->content,
         ];
 
         return new JsonResponse(
